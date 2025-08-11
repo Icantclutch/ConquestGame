@@ -22,6 +22,9 @@ public class MainMenuScript : MonoBehaviour
     [SerializeField]
     private GameObject SettingsPanel;
 
+    [SerializeField]
+    private GameObject NewGameSettingsPanel;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -33,6 +36,7 @@ public class MainMenuScript : MonoBehaviour
         //Set the correct active panels
         MainMenuPanel.SetActive(true);
         SettingsPanel.SetActive(false);
+        NewGameSettingsPanel.SetActive(false);
     }
 
     // Update is called once per frame
@@ -43,12 +47,13 @@ public class MainMenuScript : MonoBehaviour
 
     private void NewCampaginButton_Click()
     {
-
+        MainMenuPanel.SetActive(false);
+        NewGameSettingsPanel.SetActive(true);      
     }
 
     private void LoadCampaignButton_Click()
     {
-
+        Debug.LogWarning("Functionality Not Implemented");
     }
 
     private void SettingsButton_Click()
