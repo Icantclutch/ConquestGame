@@ -135,6 +135,7 @@ public class CameraControls : MonoBehaviour
             //Lerping the speed to ramp speed up and down for smooth motion
             speed = Mathf.Lerp(speed, MaxSpeed, Time.deltaTime * Accleration);
             transform.position += TargetPosition * speed * Time.deltaTime;
+            transform.position = new Vector3(Mathf.Clamp(transform.position.x, -60, 60), transform.position.y, Mathf.Clamp(transform.position.z, -60, 60));
         }
         else
         {
