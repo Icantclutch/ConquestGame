@@ -11,7 +11,7 @@ public class TimeController : MonoBehaviour
     private Button PauseButton, OneXButton, TwoXButton, ThreeXButton;
 
 
-    public UnityEvent GenerateResources;
+    public Action GenerateResources;
 
 
     [SerializeField]

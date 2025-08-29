@@ -18,7 +18,7 @@ public class PlanetController : MonoBehaviour
 
     //TODO Could do Faction string instead
     [SerializeField]
-    private int PlanetOwner; // 0 - Neutral, 1 - Player One, 2 - Player Two
+    private int PlanetOwner; // 0 - Neutral, 1 - Faction 1, 2 - Faction 2, etc...
 
     //TODO probably should do enumeration here
     [SerializeField]
@@ -29,6 +29,7 @@ public class PlanetController : MonoBehaviour
     {
         ResourceGeneration = new ResourceVault(ResourcesScriptable.CurrencyCount, ResourcesScriptable.ActiveTroopCount, ResourcesScriptable.ReserveTroopCount,
             ResourcesScriptable.FuelCount, ResourcesScriptable.MaterialCount, ResourcesScriptable.SciencePoints);
+        PlanetName = ResourcesScriptable.PlanetName;
     }
 
     // Update is called once per frame
@@ -47,6 +48,10 @@ public class PlanetController : MonoBehaviour
         return PlanetName;
     }
 
+    public int GetPlanetOwner()
+    {
+        return PlanetOwner;
+    }
     public List<string> GetBuiltStructures()
     {
         return BuiltStructures;
@@ -56,7 +61,28 @@ public class PlanetController : MonoBehaviour
     {
         if (other.tag == "CameraViewTarget")
         {
-            GetComponent<Outline>().enabled = true;
+            GameObject gameController = GameObject.FindGameObjectWithTag("GameController");
+
+            Color outlineColor = new Color();
+
+            switch (PlanetOwner)
+            {
+                case 1:
+                    outlineColor = Variables.FactionOneColor; break;
+                case 2:
+                    outlineColor = Variables.FactionTwoColor; break;
+                case 3:
+                    outlineColor = Variables.FactionThreeColor; break;
+                case 4:
+                    outlineColor = Variables.FactionFourColor; break;
+                default:
+                    outlineColor = Color.black; break;
+            }
+
+            Outline outline = GetComponent<Outline>();
+            outline.OutlineColor = outlineColor;
+            outline.OutlineWidth = 3;
+            outline.enabled = true;
             TacMapGameEventsController.TacMapEvents.PlanetHover(this);
         }
     }

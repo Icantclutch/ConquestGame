@@ -9,6 +9,8 @@ public class ResourceController : MonoBehaviour
     [SerializeField]
     private bool ActivePlayer;
 
+    private Faction PlayerFaction;
+
     [SerializeField]
     private ResourceVault PlayerResources;
 
@@ -27,6 +29,8 @@ public class ResourceController : MonoBehaviour
 
         //TODO this should generate from Faction Start
         PlayerResources = new ResourceVault();
+        TotalPlanetResourceGeneration = new ResourceVault();
+        RecalculatePlanetaryResourceTotals();
 
         if (ActivePlayer)
         {
@@ -35,9 +39,15 @@ public class ResourceController : MonoBehaviour
             FuelText.text = PlayerResources.FuelCount.ToString();
             MaterialText.text = PlayerResources.MaterialCount.ToString();
             ScienceText.text = PlayerResources.SciencePoints.ToString();
+
+            PlayerFaction = new Faction();
+        }
+        else
+        {
+            PlayerFaction = new Faction("TestEnemyFaction", Color.purple);
         }
 
-        GetComponentInParent<TimeController>().GenerateResources.AddListener(GenerateGlobalResources);
+            GetComponentInParent<TimeController>().GenerateResources += GenerateGlobalResources;
     }
 
     // Update is called once per frame
@@ -56,7 +66,7 @@ public class ResourceController : MonoBehaviour
          * set text
          */
 
-        PlayerResources.CurrencyCount += TotalPlanetResourceGeneration.CurrencyCount;       
+        PlayerResources.CurrencyCount += TotalPlanetResourceGeneration.CurrencyCount;
         PlayerResources.ReserveTroopCount += TotalPlanetResourceGeneration.ReserveTroopCount;
         PlayerResources.FuelCount += TotalPlanetResourceGeneration.FuelCount;
         PlayerResources.MaterialCount += TotalPlanetResourceGeneration.MaterialCount;
@@ -103,5 +113,10 @@ public class ResourceController : MonoBehaviour
         TotalPlanetResourceGeneration.FuelCount = fuelTotal;
         TotalPlanetResourceGeneration.MaterialCount = materialTotal;
         TotalPlanetResourceGeneration.SciencePoints = scienceTotal;
+    }
+
+    public Faction GetFaction()
+    {
+        return PlayerFaction;
     }
 }
