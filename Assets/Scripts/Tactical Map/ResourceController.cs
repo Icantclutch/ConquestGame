@@ -119,4 +119,9 @@ public class ResourceController : MonoBehaviour
     {
         return PlayerFaction;
     }
+
+    public ResourceVault GetResourceVault()
+    {
+        return PlayerResources;
+    }
 }

@@ -16,6 +16,9 @@ public class PlanetController : MonoBehaviour
     [SerializeField]
     private List<PlanetController> NeighboringPlanets;
 
+    [SerializeField]
+    private List<float> NeighboringPlanetsDistances;
+
     //TODO Could do Faction string instead
     [SerializeField]
     private int PlanetOwner; // 0 - Neutral, 1 - Faction 1, 2 - Faction 2, etc...

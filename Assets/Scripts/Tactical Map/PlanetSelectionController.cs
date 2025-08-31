@@ -1,35 +1,55 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-public class PlayerActionsController : MonoBehaviour
+public class PlanetSelectionController : MonoBehaviour
 {
     [SerializeField]
-    private GameObject PlanetInfoPanel;
+    private GameObject PlanetInfoPanel, StageInvasionPanel;
 
     [SerializeField]
     private TMP_Text PlanetNameText, CurrencyGenText, TroopGenText, FuelGenText, MaterialGenText, SciencePoints, PlanetNotes;
+    
+    [SerializeField]
+    private Button StageInvasionButton, BuildStructuresButton, StageInvasionCancelButton, PreviousPlanetButton, NextPlanetButton;
 
     [SerializeField]
-    private Button DEBUGCycleOwnerButton, DEBUGSimulateCombatButton, StageInvasionButton, BuildStructuresButton;
+    private TMP_Text MaxTroopsText, StagedTroopsText, MaxFuelText, CurrentFuelText, DestinationPlanetText;
+
+    [SerializeField]
+    private Slider TroopSlider, FuelSlider;
 
     private PlanetController HoveredPlanet;
 
+    [SerializeField]
+    private ResourceController PlayerResources;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
-    {
-        StageInvasionButton.onClick.AddListener(StageInvasion_Click);
-
-
+    {     
         TacMapGameEventsController.TacMapEvents.onPlanetHover += PlanetHover;
         TacMapGameEventsController.TacMapEvents.clearPlanetHover += ClearPlanetHover;
+
+        StageInvasionButton.onClick.AddListener(StageInvasion_Click);
+        StageInvasionCancelButton.onClick.AddListener(CloseStageInvasionMenu);
+        StageInvasionPanel.SetActive(false);
+
         PlanetInfoPanel.SetActive(false);
+
+        TroopSlider.minValue = 50;
+        FuelSlider.minValue = 0;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
-    }   
+        //If the stage invasion panel is open
+        if (StageInvasionPanel.activeSelf)
+        {
+            UpdateInvasionUI();
+         
+
+        }
+    }
 
     private void PlanetHover(PlanetController hoveredPlanet)
     {
@@ -71,6 +91,29 @@ public class PlayerActionsController : MonoBehaviour
 
     private void StageInvasion_Click()
     {
+        TroopSlider.minValue = 50;
+        FuelSlider.minValue = 0;
 
+        UpdateInvasionUI();
+
+        StageInvasionPanel.SetActive(true);
+    }
+
+    private void CloseStageInvasionMenu()
+    {
+        StageInvasionPanel.SetActive(false);
+    }
+
+    private void UpdateInvasionUI()
+    {
+        TroopSlider.maxValue = HoveredPlanet.GetPlanetResources().ActiveTroopCount;
+        MaxTroopsText.text = TroopSlider.maxValue.ToString();
+        StagedTroopsText.text = TroopSlider.value.ToString();
+
+
+        //TODO Calculate this based on the current troop count and the travel time
+        FuelSlider.maxValue = PlayerResources.GetResourceVault().FuelCount;
+        MaxFuelText.text = FuelSlider.maxValue.ToString();
+        CurrentFuelText.text = FuelSlider.value.ToString();
     }
 }
